@@ -14,13 +14,13 @@ public class Toaster : MonoBehaviour
     private Text txt;
     private string str;
     private float second;
-    private int time;
+    private float time;
 
     void Awake()
     {
         Instance = this;
         //initial value of time
-        time = 2;
+        time = 2.0f;
     }
 
     // Start is called before the first frame update
@@ -33,6 +33,10 @@ public class Toaster : MonoBehaviour
     void Update()
     {
         second += Time.deltaTime;
+        if(second >= time)
+        {
+            second = 0;
+        }
     }
 
     public void Show(string message, ToastPosition pos)
@@ -41,6 +45,7 @@ public class Toaster : MonoBehaviour
         SetPosition(pos);
         SetMessage(message);
         SetScale();
+        StartCoroutine(FadeEffect());
     }
 
 
@@ -79,6 +84,23 @@ public class Toaster : MonoBehaviour
     private void SetMessage(string message)
     {
         this.txt.text = message;
+    }
+
+
+    /**
+    *   The life time of Toaster
+    *
+    */
+    private void SetTime(float time)
+    {
+        this.time = time;
+    }
+
+    IEnumerator FadeEffect()
+    {
+        yield return new WaitForSeconds(time);
+        img.CrossFadeAlpha(0,1f,false);
+        txt.CrossFadeAlpha(0,1f,false);
     }
 
     /**
