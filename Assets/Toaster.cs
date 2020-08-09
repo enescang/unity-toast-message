@@ -14,10 +14,13 @@ public class Toaster : MonoBehaviour
     private Text txt;
     private string str;
     private float second;
+    private int time;
 
     void Awake()
     {
         Instance = this;
+        //initial value of time
+        time = 2;
     }
 
     // Start is called before the first frame update
@@ -29,19 +32,15 @@ public class Toaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SetScale();
+        second += Time.deltaTime;
     }
 
     public void Show(string message, ToastPosition pos)
     {
-        img = Instantiate(toastImageUI,transform.position, Quaternion.identity);
-        txt = Instantiate(toastTextUI);
-        img.transform.SetParent(GameObject.Find("Canvas").transform, false);
-        txt.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        CreateUIElements();
         SetPosition(pos);
         SetMessage(message);
         SetScale();
-
     }
 
 
@@ -82,26 +81,18 @@ public class Toaster : MonoBehaviour
         this.txt.text = message;
     }
 
-
-
     /**
-    *   Toaster message background image(UI)
-    * 
-    */
-    public void SetImage(Image image)
-    {
-        this.img = image;
-    }
-
-    /**
-    *   Toaster message text(UI)
+    *   Instantiate the Image(UI) and Text(UI)
+    * and make them children of canvas.
     *
     */
-    public void SetText(Text text)
+    private void CreateUIElements()
     {
-        this.txt = text;
+        img = Instantiate(toastImageUI);
+        txt = Instantiate(toastTextUI);
+        img.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        txt.transform.SetParent(GameObject.Find("Canvas").transform, false);
     }
-
 
 
 }
